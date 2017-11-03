@@ -1,10 +1,15 @@
 var PlayersService = function (callback) {
     var playersData = [];
+    var filteredPlayers = [];
     var userTeam = [];
     var service = this
 
     this.getAvailablePlayers = function getAvailablePlayers() {
         return JSON.parse(JSON.stringify(playersData))
+    }
+
+    this.getFilteredPlayers = function getFilteredPlayers() {
+        return JSON.parse(JSON.stringify(filteredPlayers))
     }
 
     this.getUserTeam = function getUserTeam() {
@@ -22,7 +27,7 @@ var PlayersService = function (callback) {
         return JSON.parse(JSON.stringify(out))
     }
 
-    this.getPlayersByTeam = function getPlayersByTeam(teamName) {
+    getPlayersByTeam = function getPlayersByTeam(teamName) {
         return playersData.filter(function (player) {
             if (player.teamName === teamName) {
                 return true;
@@ -30,7 +35,7 @@ var PlayersService = function (callback) {
         });
     }
 
-    this.getPlayersByPosition = function getPlayersByPosition(position) {
+    getPlayersByPosition = function getPlayersByPosition(position) {
         return playersData.filter(function (player) {
             if (player.position === position) {
                 return true;
@@ -38,7 +43,7 @@ var PlayersService = function (callback) {
         });
     }
 
-    this.getPlayersByFirstName = function getPlayersByFirstName(firstName) {
+    getPlayersByFirstName = function getPlayersByFirstName(firstName) {
         return playersData.filter(function (player) {
             if (player.firstName === firstName) {
                 return true;
@@ -46,12 +51,41 @@ var PlayersService = function (callback) {
         });
     }
 
-    this.getPlayersByLastName = function getPlayersByLastName(lastName) {
+    getPlayersByLastName = function getPlayersByLastName(lastName) {
         return playersData.filter(function (player) {
             if (player.lastName === lastName) {
                 return true;
             }
         });
+    }
+
+    getPlayersByProp = function getPlayersByLastName(list, prop, propValue) {
+        return list.filter(function (player) {
+            if (player[prop] === propValue) {
+                return true;
+            }
+        });
+    }
+
+    this.filterPlayers = function filterPlayers(fieldData) {
+        /*
+        var fieldData = {
+            firstName: {
+                id: 'first-name',
+                filter: getPlayersByFirstName
+            },
+        }
+        */
+        filteredPlayers = JSON.parse(JSON.stringify(playersData))
+        for (var i in playersData) {
+            var player = playersData[i]
+            var validPlayer = true
+            for (var field in fieldData) {
+                console.log('field: ', field)
+                filteredPlayers = getPlayersByProp(filteredPlayers, field, fieldData[field].value)
+            }
+        }
+        console.log('filtered players: ', filteredPlayers)
     }
 
     this.addToUserTeam = function (id) {
@@ -87,10 +121,13 @@ var PlayersService = function (callback) {
         var localData = localStorage.getItem('playersData');
         if (localData) {
             playersData = JSON.parse(localData);
+            filteredPlayers = JSON.parse(localData);
             console.log('player data: ', playersData)
-            return callback(service) 
-            // Have to pass service instance to callback or service will 
-            // be inaccessible when loading from localStorage (not yet instantiated)
+            return callback(service)
+
+            //Have to pass service instance to callback or service will 
+            //be inaccessible when loading from localStorage (not yet instantiated)
+
             //return will short-circuit the loadPlayersData function
             //this will prevent the code below from ever executing
         }
@@ -118,6 +155,7 @@ var PlayersService = function (callback) {
             localStorage.setItem('playersData', JSON.stringify(playersData))
             console.log('Finished Writing Player Data to localStorage')
             console.log('player data: ', playersData)
+            filteredPlayers = JSON.parse(JSON.stringify(playersData));
             callback(service)
         });
     }

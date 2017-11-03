@@ -45,11 +45,14 @@ Titles
 
 /*
 ---------------------
-Header Row???
+Filter Row
 ---------------------
 */
 
-
+.filter-row {
+    min-height: 300px;
+    background: lightgrey;
+}
 
 .form-control:focus {
     /* Overwrites the blue outline Bootstrap applies to form controls with focus. */

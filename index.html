@@ -14,6 +14,28 @@
 <body>
     <div class="container-fluid">
         <h1 class='text-center'>NFL Roster</h1>
+        <div class="row filter-row">
+            <h2 class='text-center'>Filter Players</h2>
+            <div class="col-sm-offset-1 col-sm-10">
+                <div class="filter-form">
+                    <input id="first-name" type="text" name="first-name" placeholder="First Name">
+                    <input id="last-name" type="text" name="last-name" placeholder="Last Name">
+                    <input id="team-name" type="text" name="team-name" placeholder="Team">
+                    <input id="position" type="text" name="position" placeholder="position">
+                    <!--
+                    <select id="position" type="text" name="position" placeholder="Position">
+                            <option value="QB" selected>QB</option>
+                            <option value="DB" selected>DB</option>
+                            <option value="WR" selected>WR</option>
+                            <option value="DL" selected>DL</option>
+                            <option value="TE" selected>TE</option>
+                            <option value="K" selected>K</option>
+                        </select>
+                    -->
+                    <button class="btn btn-main" id="filter-button" onclick="app.controllers.playersController.filterAvailablePlayers()">Filter</button>
+                </div>
+            </div>
+        </div>
         <div class="row available-players-row">
             <div class="col-sm-offset-1 col-sm-10">
                 <h2 class='text-center'>Available Players</h2>
