@@ -1,0 +1,112 @@
+/*
+------------------
+Base Styles
+------------------
+*/
+
+body {
+    background: #fff;
+    color: #000;
+}
+
+/*
+-------------------
+Grid / Flexbox
+-------------------
+*/
+
+.flex {
+    display: flex;
+}
+
+.flex.v-center {
+    align-items: center;
+}
+
+.flex.h-center {
+    justify-content: center;
+}
+
+/*
+------------------
+Titles
+------------------
+*/
+
+.main-title {
+    font-size: 5em;
+    margin-bottom: 30px;
+}
+
+.section-title {
+    font-size: 5em;
+    margin-bottom: 30px;
+}
+
+/*
+---------------------
+Header Row???
+---------------------
+*/
+
+
+
+.form-control:focus {
+    /* Overwrites the blue outline Bootstrap applies to form controls with focus. */
+    outline: none;
+    box-shadow: 0 0 7px #000 !important;
+    border: 1px solid #ccc !important;
+}
+
+/*
+------------------
+Player Sections
+------------------
+*/
+
+.available-players-row {
+    min-height: 600px;
+    background: grey;
+}
+
+.user-team-row {
+    min-height: 600px;
+    background: lightgrey;
+}
+
+.player-wrapper {
+    margin-top: 5px;
+    width: 90%;
+    height: 200px;
+    padding: 10px;
+}
+
+.player-image {
+    height: 150px;
+    border: 2px solid #fff;
+    border-radius: 2%;
+    margin: 10px;
+}
+
+/*
+------------------
+Buttons
+------------------
+*/
+
+.btn-main {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 2px;
+}
+
+.btn-main:active,
+.btn-main:focus {
+    outline: none;
+}
+
+.btn-main:hover {
+    background: #333333;
+    color: #fff;
+}

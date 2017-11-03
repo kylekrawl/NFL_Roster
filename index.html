@@ -12,14 +12,30 @@
 </head>
 
 <body>
+    <div class="container-fluid">
+        <h1 class='text-center'>NFL Roster</h1>
+        <div class="row available-players-row">
+            <div class="col-sm-offset-1 col-sm-10">
+                <h2 class='text-center'>Available Players</h2>
+                <div id="available-players">
+
+                </div>
+            </div>
+        </div>
+        <div class="row user-team-row">
+            <h2 class='text-center'>My Team</h2>
+            <div class="col-sm-offset-1 col-sm-10">
+                <div id="user-team">
+
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
-
     <script src="app/nfl-roster/nfl-roster-service.js"></script>
-
     <script src="app/nfl-roster/nfl-roster-controller.js"></script>
-
-    <script src="app/init.js"></script>c
+    <script src="app/init.js"></script>
 </body>
 
 </html>
