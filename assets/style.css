@@ -80,8 +80,9 @@ Player Sections
 .player-wrapper {
     margin-top: 5px;
     width: 90%;
-    height: 200px;
+    height: 350px;
     padding: 10px;
+    border: 2px solid #fff;
 }
 
 .player-image {

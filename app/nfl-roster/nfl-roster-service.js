@@ -68,14 +68,6 @@ var PlayersService = function (callback) {
     }
 
     this.filterPlayers = function filterPlayers(fieldData) {
-        /*
-        var fieldData = {
-            firstName: {
-                id: 'first-name',
-                filter: getPlayersByFirstName
-            },
-        }
-        */
         filteredPlayers = JSON.parse(JSON.stringify(playersData))
         for (var i in playersData) {
             var player = playersData[i]
