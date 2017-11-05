@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>NFL Roster</title>
+    <title>NFL Roster Builder</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <link rel="stylesheet" href="assets/style.css">
 
@@ -13,7 +13,7 @@
 
 <body>
     <div class="container-fluid">
-        <h1 class='text-center'>NFL Roster</h1>
+        <h1 class='text-center'>NFL Roster Builder</h1>
         <div class="row filter-row">
             <h2 class='text-center'>Filter Players</h2>
             <div class="col-sm-offset-1 col-sm-10">
@@ -40,6 +40,10 @@
         <div class="row available-players-row">
             <div class="col-sm-offset-1 col-sm-10">
                 <h2 class='text-center'>Available Players</h2>
+                <div id="available-players-buttons">
+                    <button class="btn btn-main" onclick="app.controllers.playersController.setCurrentPlayerPage('prev')">Previous Page</button>
+                    <button class="btn btn-main" onclick="app.controllers.playersController.setCurrentPlayerPage('next')">Next Page</button>
+                </div>
                 <div id="available-players">
 
                 </div>

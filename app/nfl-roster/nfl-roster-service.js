@@ -1,6 +1,8 @@
 var PlayersService = function (callback) {
     var playersData = [];
     var filteredPlayers = [];
+    var playerPages = [];
+    var currentPlayerPageIndex = [];
     var userTeam = [];
     var service = this
 
@@ -18,7 +20,7 @@ var PlayersService = function (callback) {
 
     this.getTeams = function getTeams() {
         var out = []
-        for (i in playersData) {
+        for (var i in playersData) {
             var player = playersData[i]
             if (!out.includes(player.teamName)) {
                 out.push(player.teamName)
@@ -26,42 +28,10 @@ var PlayersService = function (callback) {
         }
         return JSON.parse(JSON.stringify(out))
     }
-
-    getPlayersByTeam = function getPlayersByTeam(teamName) {
-        return playersData.filter(function (player) {
-            if (player.teamName === teamName) {
-                return true;
-            }
-        });
-    }
-
-    getPlayersByPosition = function getPlayersByPosition(position) {
-        return playersData.filter(function (player) {
-            if (player.position === position) {
-                return true;
-            }
-        });
-    }
-
-    getPlayersByFirstName = function getPlayersByFirstName(firstName) {
-        return playersData.filter(function (player) {
-            if (player.firstName === firstName) {
-                return true;
-            }
-        });
-    }
-
-    getPlayersByLastName = function getPlayersByLastName(lastName) {
-        return playersData.filter(function (player) {
-            if (player.lastName === lastName) {
-                return true;
-            }
-        });
-    }
-
+ 
     getPlayersByProp = function getPlayersByLastName(list, prop, propValue) {
         return list.filter(function (player) {
-            if (player[prop] === propValue) {
+            if (player[prop].toLowerCase() === propValue.toLowerCase()) {
                 return true;
             }
         });
@@ -71,21 +41,18 @@ var PlayersService = function (callback) {
         filteredPlayers = JSON.parse(JSON.stringify(playersData))
         for (var i in playersData) {
             var player = playersData[i]
-            var validPlayer = true
             for (var field in fieldData) {
-                console.log('field: ', field)
                 filteredPlayers = getPlayersByProp(filteredPlayers, field, fieldData[field].value)
             }
         }
-        console.log('filtered players: ', filteredPlayers)
+        console.log('Filtered Players: ', filteredPlayers)
     }
 
     this.addToUserTeam = function (id) {
-        for (i in playersData) {
-            var player = playersData[i]
+        for (var i in playerPages[currentPlayerPageIndex]) {
+            var player = playerPages[currentPlayerPageIndex][i]
             if (player.id === id && !userTeam.includes(player)) {
                 userTeam.push(player)
-                playersData.splice(playersData.indexOf(player), 1)
                 break
             }
         }
@@ -93,15 +60,53 @@ var PlayersService = function (callback) {
     }
 
     this.removeFromUserTeam = function (id) {
-        for (i in userTeam) {
+        for (var i in userTeam) {
             var player = userTeam[i]
             if (player.id === id) {
-                playersData.push(player)
                 userTeam.splice(userTeam.indexOf(player), 1)
                 break
             }
         }
         console.log(userTeam)
+    }
+
+    function preFilterPlayersData() {
+        //Filter out team objects:
+        for (var i = 0; i < playersData.length; i++) {
+            var player = playersData[i]
+            if (!player.firstName) {
+                playersData.splice(i, 1)
+                i-- //decrement i to account for removed item
+            }
+        }
+    }
+
+   this.setPlayerPages = function setPlayerPages(playersPerPage=30) {
+        playerPages = []
+        for (var i = 0; i < filteredPlayers.length; i+=playersPerPage) {
+            var endIndex = i + playersPerPage
+            playerPages.push(filteredPlayers.slice(i, i + playersPerPage))
+        }
+        console.log('Pages: ', playerPages)
+    }
+
+    this.getPlayerPages = function getPlayerPages() {
+        return JSON.parse(JSON.stringify(playerPages))
+    }
+
+    this.getCurrentPlayerPageIndex = function getCurrentPlayerPageIndex() {
+        return JSON.parse(JSON.stringify(currentPlayerPageIndex))
+    }
+
+    this.setCurrentPlayerPageIndex = function setCurrentPlayerPageIndex(i=0) {
+        currentPlayerPageIndex = i
+        console.log('page index set to ', i)
+    }
+
+    this.getCurrentPlayerPage = function getCurrentPlayerPage() {
+        console.log(currentPlayerPageIndex)
+        console.log(playerPages[currentPlayerPageIndex])
+        return JSON.parse(JSON.stringify(playerPages[currentPlayerPageIndex]))
     }
 
     function loadPlayersData() {
@@ -113,12 +118,15 @@ var PlayersService = function (callback) {
         var localData = localStorage.getItem('playersData');
         if (localData) {
             playersData = JSON.parse(localData);
-            filteredPlayers = JSON.parse(localData);
-            console.log('player data: ', playersData)
+            preFilterPlayersData()
+            filteredPlayers = playersData;
+            service.setPlayerPages()
+            service.setCurrentPlayerPageIndex()
+            console.log('Player Data: ', playersData)
             return callback(service)
 
             //Have to pass service instance to callback or service will 
-            //be inaccessible when loading from localStorage (not yet instantiated)
+            //be inaccessible when loading from localStorage
 
             //return will short-circuit the loadPlayersData function
             //this will prevent the code below from ever executing
@@ -129,9 +137,7 @@ var PlayersService = function (callback) {
         var apiUrl = url + encodeURIComponent(endpointUri);
 
         $.getJSON(apiUrl, function (data) {
-            //playersData = data.body.players
-
-            playersData = data.body.players.slice(0, 30).map(function (player) {
+            playersData = data.body.players.map(function (player) {
                 return {
                     firstName: player.firstname,
                     lastName: player.lastname,
@@ -141,13 +147,15 @@ var PlayersService = function (callback) {
                     id: player.id
                 }
             });
-
+            preFilterPlayersData()
             console.log('Player Data Ready')
             console.log('Writing Player Data to localStorage')
             localStorage.setItem('playersData', JSON.stringify(playersData))
             console.log('Finished Writing Player Data to localStorage')
-            console.log('player data: ', playersData)
+            console.log('Player Data: ', playersData)
             filteredPlayers = JSON.parse(JSON.stringify(playersData));
+            service.setPlayerPages()
+            service.setCurrentPlayerPageIndex()
             callback(service)
         });
     }

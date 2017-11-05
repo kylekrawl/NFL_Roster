@@ -23,7 +23,7 @@ var PlayersController = function () {
             DEC: 'Decatur Staleys',
             DEN: 'Denver Broncos',
             DET: 'Detroit Lions',
-            GBY: 'Green Bay Packers',
+            GB: 'Green Bay Packers',
             HOO: 'Houston Oilers',
             HOU: 'Houston Texans',
             IND: 'Indianapolis Colts',
@@ -31,7 +31,7 @@ var PlayersController = function () {
             KCY: 'Kansas City Chiefs',
             LAC: 'Los Angeles Chargers',
             LAI: 'Los Angeles Raiders',
-            LAM: 'Los Angeles Rams',
+            LAR: 'Los Angeles Rams',
             MIA: 'Miami Dolphins',
             MIN: 'Minnesota Vikings',
             NWE: 'New England Patriots',
@@ -57,35 +57,35 @@ var PlayersController = function () {
         },
         position: {
             QB: 'Quarterback',
-            RB:	'Running Back',
-            FB:	'Fullback',
-            WR:	'Wide Receiver',
-            TE:	'Tight End',
-            OL:	'Offensive Lineman',
-            C:	'Center',
-            G:	'Guard',
-            LG:	'Left Guard',
-            RG:	'Right Guard',
-            T:	'Tackle',
-            LT:	'Left Tackle',
-            RT:	'Right Tackle',
-            K:	'Kicker',
-            KR:	'Kick Returner',
-            DL:	'Defensive Lineman',
-            DE:	'Defensive End',
-            DT:	'Defensive Tackle',
-            NT:	'Nose Tackle',
-            LB:	'Linebacker',
+            RB: 'Running Back',
+            FB: 'Fullback',
+            WR: 'Wide Receiver',
+            TE: 'Tight End',
+            OL: 'Offensive Lineman',
+            C: 'Center',
+            G: 'Guard',
+            LG: 'Left Guard',
+            RG: 'Right Guard',
+            T: 'Tackle',
+            LT: 'Left Tackle',
+            RT: 'Right Tackle',
+            K: 'Kicker',
+            KR: 'Kick Returner',
+            DL: 'Defensive Lineman',
+            DE: 'Defensive End',
+            DT: 'Defensive Tackle',
+            NT: 'Nose Tackle',
+            LB: 'Linebacker',
             ILB: 'Inside Linebacker',
             OLB: 'Outside Linebacker',
             MLB: 'Middle Linebacker',
-            DB:	'Defensive Back',
-            CB:	'Cornerback',
-            FS:	'Free Safety',
-            SS:	'Strong Safety',
-            S:	'Safety',
-            P:	'Punter',
-            PR:	'Punt Returner'
+            DB: 'Defensive Back',
+            CB: 'Cornerback',
+            FS: 'Free Safety',
+            SS: 'Strong Safety',
+            S: 'Safety',
+            P: 'Punter',
+            PR: 'Punt Returner'
         }
     }
     var playersService = new PlayersService(ready);
@@ -93,34 +93,49 @@ var PlayersController = function () {
     function ready(service) {
         loading = false; //stop the spinner
         //Now that all of our player data is back we can safely setup our bindings for the rest of the view.
-        console.log('players service: ', service)
-
-        updateAvailablePlayers(service.getFilteredPlayers())
-
-        /*
-        $('some-button').on('click',function(){
-          var teamSF = playerService.getPlayersByTeam("SF");
-        }
-        /*/
-
+        updateAvailablePlayers(service.getCurrentPlayerPage())
     }
 
     this.add = function add(id) {
         playersService.addToUserTeam(id)
-        updateAvailablePlayers(playersService.getFilteredPlayers())
+        playersService.setPlayerPages()
+        updateAvailablePlayers(playersService.getCurrentPlayerPage())
         updateUserTeam(playersService.getUserTeam())
-        console.log('all players: ', playersService.getAvailablePlayers())
-        console.log('filtered players: ', playersService.getFilteredPlayers())
-        console.log('user team: ', playersService.getUserTeam())
+        console.log('All Players: ', playersService.getAvailablePlayers())
+        console.log('Filtered Players: ', playersService.getFilteredPlayers())
+        console.log('User Team: ', playersService.getUserTeam())
     }
 
     this.remove = function remove(id) {
         playersService.removeFromUserTeam(id)
-        updateAvailablePlayers(playersService.getFilteredPlayers())
+        playersService.setPlayerPages()
+        updateAvailablePlayers(playersService.getCurrentPlayerPage())
         updateUserTeam(playersService.getUserTeam())
-        console.log('all players: ', playersService.getAvailablePlayers())
-        console.log('filtered players: ', playersService.getFilteredPlayers())
-        console.log('user team: ', playersService.getUserTeam())
+        console.log('All Players: ', playersService.getAvailablePlayers())
+        console.log('Filtered Players: ', playersService.getFilteredPlayers())
+        console.log('User Team: ', playersService.getUserTeam())
+    }
+
+    this.setCurrentPlayerPage = function setCurrentPlayerPage(mode) {
+        var currentPageIndex = playersService.getCurrentPlayerPageIndex()
+        if (mode === 'first') {
+            playersService.setCurrentPlayerPageIndex(0)
+        }
+        if (mode === 'next') {
+            if (currentPageIndex >= playersService.getPlayerPages().length - 1) {
+                playersService.setCurrentPlayerPageIndex(0)
+            } else {
+                playersService.setCurrentPlayerPageIndex(currentPageIndex+1)
+            }
+        }
+        if (mode === 'prev') {
+            if (currentPageIndex <= 0) {
+                playersService.setCurrentPlayerPageIndex(playersService.getPlayerPages().length - 1)
+            } else {
+                playersService.setCurrentPlayerPageIndex(currentPageIndex-1)
+            }
+        }
+        updateAvailablePlayers(playersService.getCurrentPlayerPage())
     }
 
     this.filterAvailablePlayers = function filterAvailablePlayers() {
@@ -153,7 +168,8 @@ var PlayersController = function () {
         }
         console.log(fieldData)
         playersService.filterPlayers(fieldData)
-        updateAvailablePlayers(playersService.getFilteredPlayers())
+        playersService.setPlayerPages()
+        updateAvailablePlayers(playersService.getCurrentPlayerPage())
     }
 
     // fxn update available players display
@@ -164,18 +180,20 @@ var PlayersController = function () {
         var template = ''
         for (var i in list) {
             var player = list[i];
+            var team = !(conversionDict.teamName[player.teamName] === undefined) ?
+                conversionDict.teamName[player.teamName] : player.teamName
             template += `
-              <div class="col-sm-4 text-center">
-                <div class="player-wrapper">
-                    <img src="${player.imagePath}">
-                    <h3>${player.firstName} ${player.lastName}</h3>
-                    <p>${conversionDict.teamName[player.teamName]}</p>
-                    <p>${conversionDict.position[player.position]}</p>
-                    <div>
-                        <button class="btn-success" id="${player.id}" onclick="app.controllers.playersController.add('${player.id}')">Add to Team</button>
+                <div class="col-sm-4 text-center">
+                    <div class="player-wrapper">
+                        <img src="${player.imagePath}">
+                        <h3>${player.firstName} ${player.lastName}</h3>
+                        <p>${team}</p>
+                        <p>${conversionDict.position[player.position]}</p>
+                        <div>
+                            <button class="btn-success" id="${player.id}" onclick="app.controllers.playersController.add('${player.id}')">Add to Team</button>
+                        </div>
                     </div>
-                  </div>
-              </div>
+                </div>
               `
             elem.innerHTML = template
         }
@@ -190,18 +208,20 @@ var PlayersController = function () {
         var template = ''
         for (var i in list) {
             var player = list[i];
+            var team = !(conversionDict.teamName[player.teamName] === undefined) ?
+                conversionDict.teamName[player.teamName] : player.teamName
             template += `
-              <div class="col-sm-4 text-center">
-                <div class="player-wrapper">
-                    <img src="${player.imagePath}">
-                    <h3>${player.firstName} ${player.lastName}</h3>
-                    <p>${conversionDict.teamName[player.teamName]}</p>
-                    <p>${conversionDict.position[player.position]}</p>
-                    <div>
-                        <button class="btn-danger" id="${player.id}" onclick="app.controllers.playersController.remove('${player.id}')">Remove from Team</button>
+                <div class="col-sm-4 text-center">
+                    <div class="player-wrapper">
+                        <img src="${player.imagePath}">
+                        <h3>${player.firstName} ${player.lastName}</h3>
+                        <p>${team}</p>
+                        <p>${conversionDict.position[player.position]}</p>
+                        <div>
+                            <button class="btn-danger" id="${player.id}" onclick="app.controllers.playersController.remove('${player.id}')">Remove from Team</button>
+                        </div>
                     </div>
-                  </div>
-              </div>
+                </div>
               `
             elem.innerHTML = template
         }
