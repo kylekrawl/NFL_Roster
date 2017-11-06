@@ -223,7 +223,7 @@ var PlayersController = function () {
             var team = !(conversionDict.teamName[player.teamName] === undefined) ?
                 conversionDict.teamName[player.teamName] : player.teamName
             template += `
-                <div class="col-sm-4 text-center flex v-center h-center">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 text-center flex v-center h-center">
                     <div class="player-wrapper">
                         <img class="player-image" src="${player.imagePath}">
                         <h3>${player.firstName} ${player.lastName}</h3>
@@ -249,7 +249,7 @@ var PlayersController = function () {
             var team = !(conversionDict.teamName[player.teamName] === undefined) ?
                 conversionDict.teamName[player.teamName] : player.teamName
             template += `
-                <div class="col-sm-4 text-center flex v-center h-center">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 text-center flex v-center h-center">
                     <div class="player-wrapper">
                         <img class="player-image" src="${player.imagePath}">
                         <h3>${player.firstName} ${player.lastName}</h3>
