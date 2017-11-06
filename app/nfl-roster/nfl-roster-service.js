@@ -56,7 +56,11 @@ var PlayersService = function (callback) {
         for (var i in playersData) {
             var player = playersData[i]
             for (var field in fieldData) {
-                filteredPlayers = getPlayersByProp(filteredPlayers, field, fieldData[field].value)
+                if (getPlayersByProp(filteredPlayers, field, fieldData[field].value)) {
+                    filteredPlayers = getPlayersByProp(filteredPlayers, field, fieldData[field].value)
+                } else {
+                    filteredPlayers = []
+                } 
             }
         }
         this.setCurrentPlayerPageIndex()
@@ -101,6 +105,9 @@ var PlayersService = function (callback) {
         for (var i = 0; i < filteredPlayers.length; i+=playersPerPage) {
             var endIndex = i + playersPerPage
             playerPages.push(filteredPlayers.slice(i, i + playersPerPage))
+        }
+        if (playerPages.length < 1) {
+            playerPages = [[]]
         }
         console.log('Pages: ', playerPages)
     }
