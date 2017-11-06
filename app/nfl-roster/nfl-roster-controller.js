@@ -95,7 +95,7 @@ var PlayersController = function () {
     function ready(service) {
         loading = false; //stop the spinner
         //Now that all of our player data is back we can safely setup our bindings for the rest of the view.
-        updateAvailablePlayers(service.getCurrentPlayerPage())
+        updateAvailablePlayers(service.getCurrentPlayerPage(), service.getUserTeam())
         updateTeamSelect(service.getTeams())
         updatePositionSelect(service.getPositions())
     }
@@ -103,7 +103,7 @@ var PlayersController = function () {
     this.add = function add(id) {
         playersService.addToUserTeam(id)
         playersService.setPlayerPages()
-        updateAvailablePlayers(playersService.getCurrentPlayerPage())
+        updateAvailablePlayers(playersService.getCurrentPlayerPage(), playersService.getUserTeam())
         updateUserTeam(playersService.getUserTeam())
         console.log('All Players: ', playersService.getAvailablePlayers())
         console.log('Filtered Players: ', playersService.getFilteredPlayers())
@@ -113,7 +113,7 @@ var PlayersController = function () {
     this.remove = function remove(id) {
         playersService.removeFromUserTeam(id)
         playersService.setPlayerPages()
-        updateAvailablePlayers(playersService.getCurrentPlayerPage())
+        updateAvailablePlayers(playersService.getCurrentPlayerPage(), playersService.getUserTeam())
         updateUserTeam(playersService.getUserTeam())
         console.log('All Players: ', playersService.getAvailablePlayers())
         console.log('Filtered Players: ', playersService.getFilteredPlayers())
@@ -139,7 +139,7 @@ var PlayersController = function () {
                 playersService.setCurrentPlayerPageIndex(currentPageIndex - 1)
             }
         }
-        updateAvailablePlayers(playersService.getCurrentPlayerPage())
+        updateAvailablePlayers(playersService.getCurrentPlayerPage(), playersService.getUserTeam())
     }
 
     this.clearFilterFields = function clearFilterFields() {
@@ -190,7 +190,7 @@ var PlayersController = function () {
         console.log(fieldData)
         playersService.filterPlayers(fieldData)
         playersService.setPlayerPages()
-        updateAvailablePlayers(playersService.getCurrentPlayerPage())
+        updateAvailablePlayers(playersService.getCurrentPlayerPage(), playersService.getUserTeam())
     }
 
     function updateTeamSelect(list) {
@@ -227,17 +227,30 @@ var PlayersController = function () {
         elem.innerHTML = template
     }
 
-    function updateAvailablePlayers(list) {
+    function updateAvailablePlayers(list, userTeamList) {
         var elem = document.getElementById('available-players')
         elem.innerHTML = ''
         var template = ''
         for (var i in list) {
+            var additionalClasses = ''
             var player = list[i];
+            console.log('User Team: ', userTeamList)
+            for (var i in userTeamList) {
+                var teamPlayer = userTeamList[i]
+                var onUserTeam = Object.keys(player).every(function(prop){
+                    return player[prop] === teamPlayer[prop]
+                })
+                console.log(onUserTeam)
+                if (onUserTeam) {
+                    additionalClasses += 'added-player'
+                    break 
+                }
+            }
             var team = !(conversionDict.teamName[player.teamName] === undefined) ?
                 conversionDict.teamName[player.teamName] : player.teamName
             template += `
                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4 text-center flex v-center h-center">
-                    <div class="player-wrapper">
+                    <div class="player-wrapper ${additionalClasses}">
                         <img class="player-image" src="${player.imagePath}">
                         <h3>${player.firstName} ${player.lastName}</h3>
                         <p>${team}</p>

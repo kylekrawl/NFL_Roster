@@ -122,7 +122,7 @@ var PlayersService = function (callback) {
 
     this.setCurrentPlayerPageIndex = function setCurrentPlayerPageIndex(i=0) {
         currentPlayerPageIndex = i
-        console.log('page index set to ', i)
+        console.log('Page index set to ', i)
     }
 
     this.getCurrentPlayerPage = function getCurrentPlayerPage() {
