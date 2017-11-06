@@ -174,7 +174,6 @@ var PlayersController = function () {
         }
         for (var field in fieldData) {
             var elem = document.getElementById(fieldData[field].id)
-            console.log(elem)
             if (fieldData[field].type === 'input') {
                 var val = elem.value
             }
@@ -187,7 +186,6 @@ var PlayersController = function () {
                 delete fieldData[field]
             }
         }
-        console.log(fieldData)
         playersService.filterPlayers(fieldData)
         playersService.setPlayerPages()
         updateAvailablePlayers(playersService.getCurrentPlayerPage(), playersService.getUserTeam())
@@ -203,7 +201,6 @@ var PlayersController = function () {
                             <option value='' selected>Team Name</option>`
         for (var i in list) {
             var teamName = list[i]
-            console.log(teamName)
             template += `<option value="${teamName}">${conversionDict.teamName[teamName]}</option>`
         }
         template += `</select>`
@@ -220,7 +217,6 @@ var PlayersController = function () {
                             <option value='' selected>Position</option>`
         for (var i in list) {
             var position = list[i]
-            console.log(position)
             template += `<option value="${position}">${conversionDict.position[position]}</option>`
         }
         template += `</select>`
@@ -233,17 +229,12 @@ var PlayersController = function () {
         var template = ''
         for (var i in list) {
             var additionalClasses = ''
-            var player = list[i];
-            console.log('User Team: ', userTeamList)
+            var player = list[i]
             for (var i in userTeamList) {
                 var teamPlayer = userTeamList[i]
-                var onUserTeam = Object.keys(player).every(function(prop){
-                    return player[prop] === teamPlayer[prop]
-                })
-                console.log(onUserTeam)
-                if (onUserTeam) {
+                if (player.id === teamPlayer.id) {
                     additionalClasses += 'added-player'
-                    break 
+                    break
                 }
             }
             var team = !(conversionDict.teamName[player.teamName] === undefined) ?
