@@ -3,7 +3,7 @@ var PlayersController = function () {
     var loading = true; //Start the spinner
     var conversionDict = {
         teamName: {
-            ARZ: 'Arizona Cardinals',
+            ARI: 'Arizona Cardinals',
             ATL: 'Atlanta Falcons',
             BAC: 'Baltimore Colts',
             BAL: 'Baltimore Ravens',
@@ -28,14 +28,14 @@ var PlayersController = function () {
             HOU: 'Houston Texans',
             IND: 'Indianapolis Colts',
             JAC: 'Jacksonville Jaguars',
-            KCY: 'Kansas City Chiefs',
+            KC: 'Kansas City Chiefs',
             LAC: 'Los Angeles Chargers',
             LAI: 'Los Angeles Raiders',
             LAR: 'Los Angeles Rams',
             MIA: 'Miami Dolphins',
             MIN: 'Minnesota Vikings',
-            NWE: 'New England Patriots',
-            NOR: 'New Orleans Saints',
+            NE: 'New England Patriots',
+            NO: 'New Orleans Saints',
             NYG: 'New York Giants',
             NYJ: 'New York Jets',
             NYT: 'New York Titans',
@@ -53,7 +53,9 @@ var PlayersController = function () {
             TB: 'Tampa Bay Buccaneers',
             TEN: 'Tennessee Titans',
             TNO: 'Tennessee Oilers',
-            WAS: 'Washington Redskins'
+            WAS: 'Washington Redskins',
+            FA: 'Free Agent',
+            DRF: 'Unsigned'
         },
         position: {
             QB: 'Quarterback',
@@ -94,6 +96,8 @@ var PlayersController = function () {
         loading = false; //stop the spinner
         //Now that all of our player data is back we can safely setup our bindings for the rest of the view.
         updateAvailablePlayers(service.getCurrentPlayerPage())
+        updateTeamSelect(service.getTeams())
+        updatePositionSelect(service.getPositions())
     }
 
     this.add = function add(id) {
@@ -125,14 +129,14 @@ var PlayersController = function () {
             if (currentPageIndex >= playersService.getPlayerPages().length - 1) {
                 playersService.setCurrentPlayerPageIndex(0)
             } else {
-                playersService.setCurrentPlayerPageIndex(currentPageIndex+1)
+                playersService.setCurrentPlayerPageIndex(currentPageIndex + 1)
             }
         }
         if (mode === 'prev') {
             if (currentPageIndex <= 0) {
                 playersService.setCurrentPlayerPageIndex(playersService.getPlayerPages().length - 1)
             } else {
-                playersService.setCurrentPlayerPageIndex(currentPageIndex-1)
+                playersService.setCurrentPlayerPageIndex(currentPageIndex - 1)
             }
         }
         updateAvailablePlayers(playersService.getCurrentPlayerPage())
@@ -142,24 +146,34 @@ var PlayersController = function () {
         var fieldData = {
             firstName: {
                 id: 'first-name',
-                value: ''
+                value: '',
+                type: 'input'
             },
             lastName: {
                 id: 'last-name',
-                value: ''
+                value: '',
+                type: 'input'
             },
             teamName: {
                 id: 'team-name',
-                value: ''
+                value: '',
+                type: 'select'
             },
             position: {
                 id: 'position',
-                value: ''
+                value: '',
+                type: 'select'
             }
         }
         for (var field in fieldData) {
-            console.log(fieldData[field].id)
-            var val = document.getElementById(fieldData[field].id).value
+            var elem = document.getElementById(fieldData[field].id)
+            console.log(elem)
+            if (fieldData[field].type === 'input') {
+                var val = elem.value
+            }
+            if (fieldData[field].type === 'select') {
+                var val = elem.options[elem.selectedIndex].value
+            }
             if (val) {
                 fieldData[field].value = val
             } else {
@@ -172,7 +186,33 @@ var PlayersController = function () {
         updateAvailablePlayers(playersService.getCurrentPlayerPage())
     }
 
-    // fxn update available players display
+    function updateTeamSelect(list) {
+        var elem = document.getElementById('team-select')
+        elem.innerHTML = ''
+        var template = `<select id="team-name" type="text" name="team-name">
+                            <option value='' selected>Team Name</option>`
+        for (var i in list) {
+            var teamName = list[i]
+            console.log(teamName)
+            template += `<option value="${teamName}">${conversionDict.teamName[teamName]}</option>`
+        }
+        template += `</select>`
+        elem.innerHTML = template
+    }
+
+    function updatePositionSelect(list) {
+        var elem = document.getElementById('position-select')
+        elem.innerHTML = ''
+        var template = `<select id="position" type="text" name="position">
+                            <option value='' selected>Position</option>`
+        for (var i in list) {
+            var position = list[i]
+            console.log(position)
+            template += `<option value="${position}">${conversionDict.position[position]}</option>`
+        }
+        template += `</select>`
+        elem.innerHTML = template
+    }
 
     function updateAvailablePlayers(list) {
         var elem = document.getElementById('available-players')

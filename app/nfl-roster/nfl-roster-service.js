@@ -22,10 +22,23 @@ var PlayersService = function (callback) {
         var out = []
         for (var i in playersData) {
             var player = playersData[i]
-            if (!out.includes(player.teamName)) {
+            if (player.teamName && !out.includes(player.teamName)) {
                 out.push(player.teamName)
             }
         }
+        console.log('Teams in Data: ', out)
+        return JSON.parse(JSON.stringify(out))
+    }
+
+    this.getPositions = function getPositions() {
+        var out = []
+        for (var i in playersData) {
+            var player = playersData[i]
+            if (player.position && !out.includes(player.position)) {
+                out.push(player.position)
+            }
+        }
+        console.log('Positions in Data: ', out)
         return JSON.parse(JSON.stringify(out))
     }
  
@@ -45,6 +58,7 @@ var PlayersService = function (callback) {
                 filteredPlayers = getPlayersByProp(filteredPlayers, field, fieldData[field].value)
             }
         }
+        this.setCurrentPlayerPageIndex()
         console.log('Filtered Players: ', filteredPlayers)
     }
 

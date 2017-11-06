@@ -20,19 +20,12 @@
                 <div class="filter-form">
                     <input id="first-name" type="text" name="first-name" placeholder="First Name">
                     <input id="last-name" type="text" name="last-name" placeholder="Last Name">
-                    <input id="team-name" type="text" name="team-name" placeholder="Team">
-                    <input id="position" type="text" name="position" placeholder="Position">
-                    <!--
-                    <select id="position" type="text" name="position" placeholder="Position">
-                            <option value="" selected>None</option>
-                            <option value="QB" selected>QB</option>
-                            <option value="DB" selected>DB</option>
-                            <option value="WR" selected>WR</option>
-                            <option value="DL" selected>DL</option>
-                            <option value="TE" selected>TE</option>
-                            <option value="K" selected>K</option>
-                        </select>
-                    -->
+                    <div id="team-select">
+
+                    </div>
+                    <div id="position-select">
+
+                    </div>
                     <button class="btn btn-main" id="filter-button" onclick="app.controllers.playersController.filterAvailablePlayers()">Filter</button>
                 </div>
             </div>
