@@ -142,6 +142,13 @@ var PlayersController = function () {
         updateAvailablePlayers(playersService.getCurrentPlayerPage())
     }
 
+    this.clearFilterFields = function clearFilterFields() {
+        document.getElementById('first-name').value = ''
+        document.getElementById('last-name').value = ''
+        document.getElementById('team-name').selectedIndex = 0
+        document.getElementById('position').selectedIndex = 0
+    }
+
     this.filterAvailablePlayers = function filterAvailablePlayers() {
         var fieldData = {
             firstName: {
@@ -187,6 +194,9 @@ var PlayersController = function () {
     }
 
     function updateTeamSelect(list) {
+        list = list.sort(function(a, b) {
+            return a.toLowerCase().charCodeAt(0) - b.toLowerCase().charCodeAt(0)
+        })
         var elem = document.getElementById('team-select')
         elem.innerHTML = ''
         var template = `<select id="team-name" type="text" name="team-name">
@@ -201,6 +211,9 @@ var PlayersController = function () {
     }
 
     function updatePositionSelect(list) {
+        list = list.sort(function(a, b) {
+            return a.toLowerCase().charCodeAt(0) - b.toLowerCase().charCodeAt(0)
+        })
         var elem = document.getElementById('position-select')
         elem.innerHTML = ''
         var template = `<select id="position" type="text" name="position">

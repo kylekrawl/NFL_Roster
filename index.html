@@ -25,7 +25,10 @@
                     </div>
                     <div id="position-select">
                     </div>
-                    <button class="btn btn-main btn-filter" id="filter-button" onclick="app.controllers.playersController.filterAvailablePlayers()">Filter</button>
+                    <div class="content-wrapper flex v-center h-center">
+                        <button class="btn btn-main btn-filter" id="filter-button" onclick="app.controllers.playersController.filterAvailablePlayers()">Filter</button>
+                        <button class="btn btn-main btn-filter" id="clear-button" onclick="app.controllers.playersController.clearFilterFields()">Clear</button>
+                    </div>
                 </div>
             </div>
         </div>
