@@ -76,6 +76,8 @@ Player Sections
 .available-players-row {
     min-height: 600px;
     background: #003399;
+    background: linear-gradient(rgba(26, 83, 255, 0.9), rgba(26, 83, 255, 0.9)), url("images/field-texture.jpg") center no-repeat;
+    background-size: cover;
     box-shadow: 0 5px 30px -5px #fff inset;
     padding: 15px 0;
     
@@ -84,6 +86,8 @@ Player Sections
 .user-team-row {
     min-height: 500px;
     background: #990000;
+    background: linear-gradient(rgba(153, 0, 0, 0.9), rgba(153, 0, 0, 0.9)), url("images/football-texture.jpg") center no-repeat;
+    background-size: cover;
     box-shadow: 0 5px 30px -5px #fff inset;
     padding: 15px 0;
 }
