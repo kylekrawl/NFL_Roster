@@ -1,9 +1,10 @@
 var PlayersService = function (callback) {
-    var playersData = [];
-    var filteredPlayers = [];
-    var playerPages = [];
-    var currentPlayerPageIndex = [];
-    var userTeam = [];
+    var userTeamMaxSize = 9
+    var playersData = []
+    var filteredPlayers = []
+    var playerPages = []
+    var currentPlayerPageIndex = []
+    var userTeam = []
     var service = this
 
     this.getAvailablePlayers = function getAvailablePlayers() {
@@ -65,7 +66,7 @@ var PlayersService = function (callback) {
     this.addToUserTeam = function (id) {
         for (var i in playerPages[currentPlayerPageIndex]) {
             var player = playerPages[currentPlayerPageIndex][i]
-            if (player.id === id && !userTeam.includes(player)) {
+            if (player.id === id && !userTeam.includes(player) && userTeam.length < userTeamMaxSize) {
                 userTeam.push(player)
                 break
             }

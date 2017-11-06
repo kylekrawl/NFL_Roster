@@ -223,9 +223,9 @@ var PlayersController = function () {
             var team = !(conversionDict.teamName[player.teamName] === undefined) ?
                 conversionDict.teamName[player.teamName] : player.teamName
             template += `
-                <div class="col-sm-4 text-center">
+                <div class="col-sm-4 text-center flex v-center h-center">
                     <div class="player-wrapper">
-                        <img src="${player.imagePath}">
+                        <img class="player-image" src="${player.imagePath}">
                         <h3>${player.firstName} ${player.lastName}</h3>
                         <p>${team}</p>
                         <p>${conversionDict.position[player.position]}</p>
@@ -240,8 +240,6 @@ var PlayersController = function () {
 
     }
 
-    // fxn update player roster
-
     function updateUserTeam(list) {
         var elem = document.getElementById('user-team')
         elem.innerHTML = ''
@@ -251,9 +249,9 @@ var PlayersController = function () {
             var team = !(conversionDict.teamName[player.teamName] === undefined) ?
                 conversionDict.teamName[player.teamName] : player.teamName
             template += `
-                <div class="col-sm-4 text-center">
+                <div class="col-sm-4 text-center flex v-center h-center">
                     <div class="player-wrapper">
-                        <img src="${player.imagePath}">
+                        <img class="player-image" src="${player.imagePath}">
                         <h3>${player.firstName} ${player.lastName}</h3>
                         <p>${team}</p>
                         <p>${conversionDict.position[player.position]}</p>

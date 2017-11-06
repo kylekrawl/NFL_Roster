@@ -5,8 +5,9 @@ Base Styles
 */
 
 body {
-    background: #fff;
+    background: #d9d9d9;
     color: #000;
+    font-family: 'Montserrat', sans-serif;
 }
 
 /*
@@ -27,6 +28,10 @@ Grid / Flexbox
     justify-content: center;
 }
 
+.flex.h-space-between {
+    justify-content: space-between;
+}
+
 /*
 ------------------
 Titles
@@ -34,13 +39,17 @@ Titles
 */
 
 .main-title {
-    font-size: 5em;
+    font-size: 4em;
     margin-bottom: 30px;
+    font-family: 'Bevan', cursive;
+    text-shadow: 2px 2px 0px #fff;
 }
 
 .section-title {
-    font-size: 5em;
+    font-size: 3em;
     margin-bottom: 30px;
+    font-family: 'Carter One', cursive;
+    text-shadow: 2px 2px 0px #fff;
 }
 
 /*
@@ -51,14 +60,11 @@ Filter Row
 
 .filter-row {
     min-height: 300px;
-    background: lightgrey;
+    background: #d9d9d9;
 }
 
-.form-control:focus {
-    /* Overwrites the blue outline Bootstrap applies to form controls with focus. */
-    outline: none;
-    box-shadow: 0 0 7px #000 !important;
-    border: 1px solid #ccc !important;
+.filter-form {
+    width: 200px;
 }
 
 /*
@@ -69,26 +75,38 @@ Player Sections
 
 .available-players-row {
     min-height: 600px;
-    background: grey;
+    background: #0044cc;
+    box-shadow: 0 5px 30px -5px #fff inset;
+    padding: 15px 0;
+    
 }
 
 .user-team-row {
-    min-height: 600px;
-    background: lightgrey;
+    min-height: 500px;
+    background: #990000;
+    box-shadow: 0 5px 30px -5px #fff inset;
+    padding: 15px 0;
 }
 
 .player-wrapper {
+    background: #d9d9d9;
     margin-top: 5px;
     width: 90%;
     height: 380px;
     padding: 10px;
     border: 2px solid #fff;
+    border-radius: 5px;
+}
+
+.added-player {
+    opacity: 0.5;
 }
 
 .player-image {
+    background: #fff;
     height: 150px;
     border: 2px solid #fff;
-    border-radius: 2%;
+    border-radius: 10%;
     margin: 10px;
 }
 
@@ -99,10 +117,18 @@ Buttons
 */
 
 .btn-main {
-    background: #000;
+    background: #990000;
     color: #fff;
-    border: 2px solid #fff;
-    border-radius: 2px;
+    border-radius: 5px;
+    display: block;
+}
+
+.btn-page {
+    width: 100px;
+}
+
+.btn-filter {
+    margin: 10px auto 0;
 }
 
 .btn-main:active,
@@ -111,6 +137,6 @@ Buttons
 }
 
 .btn-main:hover {
-    background: #333333;
+    background: #800000;
     color: #fff;
 }
